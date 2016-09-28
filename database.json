@@ -1,0 +1,13 @@
+{
+    "dev": {
+        "database": "testdb",
+        "driver": "mysql",
+        "host": "localhost",
+        "port": 3307,
+        "multipleStatements": true,
+        "password": {
+            "ENV": "DB_PASS"
+        },
+        "user": "root"
+    }
+}
