@@ -1,18 +1,25 @@
 'use strict';
 
 let DBMigrate = require('db-migrate');
-import * as chai from 'chai';
 
-let expect = chai.expect;
+let dbName = "richs";
+let dbmigrateConfig = {
+    "dev": {
+        "driver": "mysql",
+        "host": "localhost",
+        "port": 3307,
+        "multipleStatements": true,
+        "password": process.env.DB_PASS,
+        "user": "root"
+    }
+};
 
-// let dbMigrateCallback = (migrator, originalErr) => {
-//     migrator.driver.close((err) => {
-//         expect(originalErr).to.be.undefined;
-//         expect(err).to.be.undefined;
-//         console.log('Done');
-//     })
-// };
-
-//let dbMigrate = DBMigrate.getInstance(true, dbMigrateCallback);
-let dbMigrate = DBMigrate.getInstance(true);
-dbMigrate.up();
+let dbMigrate = DBMigrate.getInstance(true, { config: dbmigrateConfig });
+dbMigrate.createDatabase(dbName)
+    .then(() => {
+        dbMigrate.config.dev.database = dbName;
+        return dbMigrate.up();
+    })
+    .catch((err) => {
+        console.log("DBMigrate Error:", err);
+    });
